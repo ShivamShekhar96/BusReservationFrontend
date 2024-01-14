@@ -1,0 +1,24 @@
+{
+  "data": {
+    "bus_details": {
+      "number": "123456789"
+    },
+    "seats": [
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "booked"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "booked"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "booked"
+      }
+    ]
+  }
+}
