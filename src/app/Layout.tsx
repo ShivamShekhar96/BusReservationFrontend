@@ -1,13 +1,19 @@
 import React from "react";
 import NavigationBar from "../pages/NavigationBar";
+import { getObjectClassNames } from "design/utils";
 
-const Layout = ({...props}) => {
+const classes = getObjectClassNames({
+  container: {
+    background: "ghostwhite",
+  },
+});
+const Layout = ({ ...props }) => {
   return (
-    <React.Fragment>
+    <div className={classes.container}>
       <NavigationBar />
       {props.children}
-    </React.Fragment>
+    </div>
   );
 };
 
-export default Layout
+export default Layout;

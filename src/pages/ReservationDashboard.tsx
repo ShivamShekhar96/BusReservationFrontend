@@ -140,7 +140,7 @@ const ReservationDashboard = () => {
         flexDirection: "column",
         alignItems: "center",
         background:
-          "linear-gradient(90deg, rgba(172,99,242,1) 0%, rgba(230,192,244,1) 100%)",
+          "ghostwhite",
       }}
     >
       <BusMenu

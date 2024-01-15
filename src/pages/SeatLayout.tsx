@@ -61,13 +61,14 @@ const classes = getObjectClassNames({
     justifyContent: "center",
     alignItems: "center",
     background:
-      "linear-gradient(90deg, rgba(172,99,242,1) 0%, rgba(230,192,244,1) 100%)",
+      "ghostwhite",
     padding: 10,
   },
   reservationText: {
     background: "red",
     margin: "10px 0px 5px 0px",
     padding: 10,
+    borderRadius: 3
   },
   headerText: {
     padding: 10,
@@ -235,7 +236,6 @@ const SeatLayout = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      debugger
       const response = await axios.post("make reservation", {
         ...data,
         bus_number: busDetails.number,
