@@ -6,18 +6,163 @@
     "seats": [
       {
         "type": "lower",
-        "number": "0",
-        "status": "booked"
+        "number": "01",
+        "status": "confirmed"
       },
       {
         "type": "lower",
-        "number": "0",
-        "status": "booked"
+        "number": "02",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "03",
+        "status": "confirmed"
       },
       {
         "type": "upper",
         "number": "0",
-        "status": "booked"
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "available"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "available"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "0",
+        "status": "confirmed"
+      },
+      {
+        "type": "lower",
+        "number": "30",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "31",
+        "status": "confirmed"
+      },
+      {
+        "type": "upper",
+        "number": "32",
+        "status": "confirmed"
       }
     ]
   }

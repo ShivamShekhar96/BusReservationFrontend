@@ -10,7 +10,7 @@ const classes: any = getObjectClassNames({
     height: 40,
     justifyContent: "space-around",
     padding: 10,
-    background: 'linear-gradient(90deg, grey, transparent)'
+    background: 'linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(139,13,175,0.7245491946778712) 20%, rgba(0,212,255,1) 100%)'
   },
   navText: {
     fontSize: 20,
