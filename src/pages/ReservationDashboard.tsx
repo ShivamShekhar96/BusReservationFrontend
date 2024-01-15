@@ -1,18 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Button,
-  Input,
-  Modal,
-  Table,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { Modal } from "@mui/material";
 import axios from "axios";
 import DashboardData from "../helpers/dashboard.json";
 import { getObjectClassNames } from "../design/utils";
 import { Bus, BusMenu } from "./common/BusMenu";
+import { EditView } from "./common/EditModal";
 
 const classes = getObjectClassNames({
   tableCellHeader: {
@@ -73,38 +65,7 @@ const classes = getObjectClassNames({
   // },
 });
 
-const modalClasses = getObjectClassNames({
-  container: {
-    flexDirection: "column",
-    background: "aliceblue",
-    flexWrap: "wrap",
-    width: "40%",
-    margin: 50,
-    alignContent: "center",
-    height: 300,
-    display: "flex",
-    borderRadius: 2,
-    padding: 10,
-    justifyContent: "center",
-  },
-  actionContainer: {
-    flexDirection: "row",
-    display: "flex",
-    justifyContent: "center",
-  },
-  fields: {
-    flexDirection: "column",
-    display: "flex",
-    padding: 10,
-    width: "80%",
-    alignContent: "center",
-  },
-  input: {
-    height: 25,
-    margin: 5,
-  },
-});
-type Reservation = {
+export type Reservation = {
   first_name: string;
   last_name: string;
   email: string;
@@ -116,46 +77,6 @@ type UpdatedValue = {
   first_name?: string;
   last_name?: string;
   email?: string;
-};
-
-type EditView = {
-  onSaveChanges: any;
-  onCancel: any;
-  onUpdate: any;
-  index: number;
-  reservations: Array<Reservation>;
-};
-
-const EditView = (props: EditView) => {
-  const data = props.reservations[props.index];
-  return (
-    <div className={modalClasses.container}>
-      <div className={modalClasses.fields}>
-        <input
-          defaultValue={data.first_name}
-          name="First Name"
-          onChange={(e) => props.onUpdate("first_name", e.target.value)}
-          className={modalClasses.input}
-        />
-        <input
-          defaultValue={data.last_name}
-          name="Last Name"
-          onChange={(e) => props.onUpdate("last_name", e.target.value)}
-          className={modalClasses.input}
-        />
-        <input
-          defaultValue={data.email}
-          name="Email"
-          onChange={(e) => props.onUpdate("email", e.target.value)}
-          className={modalClasses.input}
-        />
-      </div>
-      <div className={modalClasses.actionContainer}>
-        <Button onClick={props.onSaveChanges}>Save</Button>
-        <Button onClick={props.onCancel}>Cancel</Button>
-      </div>
-    </div>
-  );
 };
 
 const ReservationDashboard = () => {
@@ -212,7 +133,15 @@ const ReservationDashboard = () => {
 
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      style={{
+        padding: 10,
+        height: '100%',
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        background:
+          "linear-gradient(90deg, rgba(172,99,242,1) 0%, rgba(230,192,244,1) 100%)",
+      }}
     >
       <BusMenu
         onBusSelect={onBusSelect}

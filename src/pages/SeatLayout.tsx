@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import SeatsData from "../helpers/seats.json";
 import { getObjectClassNames } from "design/utils";
 import { BusMenu } from "./common/BusMenu";
+import { BookingModal } from "./common/BookingModal";
 
 type DeckProps = {
   seats: Array<Seat>;
@@ -30,12 +31,6 @@ type ReservationModal = {
   onCancel: any;
 };
 
-type UserData = {
-  first_name: string;
-  last_name: string;
-  email: string;
-};
-
 type BusDetails = {
   number: string;
 };
@@ -44,7 +39,7 @@ const deckClasses = getObjectClassNames({
   container: {
     display: "flex",
     flexDirection: "row",
-    width: '50%',
+    width: "50%",
     height: 400,
     background: "floralwhite",
     borderRadius: 3,
@@ -81,8 +76,8 @@ const classes = getObjectClassNames({
     fontWeight: 600,
   },
   busContainer: {
-    width: '50%'
-  }
+    width: "50%",
+  },
 });
 
 const seatClasses = getObjectClassNames({
@@ -109,39 +104,6 @@ const seatClasses = getObjectClassNames({
     height: 15,
   },
 });
-const ReservationModal = (props: ReservationModal) => {
-  const [userData, setUserData] = useState<UserData>({
-    first_name: "",
-    last_name: "",
-    email: "",
-  });
-
-  const handleChange = (key: string, value: string) => {
-    const temp = userData;
-    temp[key] = value;
-    setUserData(temp);
-  };
-
-  return (
-    <React.Fragment>
-      {["First Name", "Last Name", "Email"].map((t) => {
-        return (
-          <Input
-            name={t}
-            onChange={(e) => {
-              handleChange(t, e.target.value);
-            }}
-          />
-        );
-      })}
-
-      <div>
-        <Button onClick={() => props.onSubmit(userData)}>Book</Button>
-        <Button onClick={props.onCancel}>Cancel</Button>
-      </div>
-    </React.Fragment>
-  );
-};
 
 const Seat = (props: SeatProps) => {
   const background =
@@ -271,8 +233,9 @@ const SeatLayout = () => {
     setShowReservationModal(false);
   };
 
-  const onSubmit = async (data: UserData) => {
+  const onSubmit = async (data: any) => {
     try {
+      debugger
       const response = await axios.post("make reservation", {
         ...data,
         bus_number: busDetails.number,
@@ -314,8 +277,7 @@ const SeatLayout = () => {
         onClick={(e: any) => onSeatSelect(e.target.value)}
       />
       <Modal open={showReservationModal}>
-        <ReservationModal
-          seat={seatRef.current}
+        <BookingModal
           onSubmit={onSubmit}
           onCancel={onCancel}
         />
