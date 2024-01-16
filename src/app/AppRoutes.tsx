@@ -3,8 +3,6 @@ import Loadable from "react-loadable";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import Layout from "./Layout";
 import Loader from "../helpers/Loading";
-// import ReservationDashboard from "../pages/ReservationDashboard";
-// import SeatLayout from "../pages/SeatLayout";
 
 const SeatLayout: any = Loadable({
   loading: Loader,

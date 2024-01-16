@@ -132,7 +132,7 @@ const Deck = (props: DeckProps) => {
               );
           })}
         </div>
-        <div style={{ display: "flex", flexDirection: "row", marginTop: 100 }}>
+        <div style={{ display: "flex", flexDirection: "row", marginTop: 100, marginBottom: 10 }}>
           {seats.map((seat, i) => {
             if (i >= 10 && i < 15)
               return (
