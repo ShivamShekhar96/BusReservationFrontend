@@ -1,38 +1,16 @@
-import { Button, Input, Modal } from "@mui/material";
-import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import { Modal, useThemeProps } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import SeatsData from "../helpers/seats.json";
 import { getObjectClassNames } from "design/utils";
-import { BusMenu } from "./common/BusMenu";
-import { BookingModal } from "./common/BookingModal";
+import { Bus, BusMenu } from "./common/BusMenu";
+import { BookingModal, UserData } from "./common/BookingModal";
+import Request from "helpers/request";
+import { Seat, SeatData } from "./common/Seat";
 
 type DeckProps = {
-  seats: Array<Seat>;
+  seats: Array<SeatData>;
   onClick: any;
   deckType: string;
-};
-
-type SeatProps = {
-  seat: Seat;
-  onClick: any;
-  className?: any;
-  headClass?: any;
-};
-
-type Seat = {
-  type: string;
-  number: string;
-  status: string;
-};
-
-type ReservationModal = {
-  seat: Seat;
-  onSubmit: any;
-  onCancel: any;
-};
-
-type BusDetails = {
-  number: string;
 };
 
 const deckClasses = getObjectClassNames({
@@ -60,15 +38,14 @@ const classes = getObjectClassNames({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    background:
-      "ghostwhite",
+    background: "ghostwhite",
     padding: 10,
   },
   reservationText: {
     background: "red",
     margin: "10px 0px 5px 0px",
     padding: 10,
-    borderRadius: 3
+    borderRadius: 3,
   },
   headerText: {
     padding: 10,
@@ -106,39 +83,11 @@ const seatClasses = getObjectClassNames({
   },
 });
 
-const Seat = (props: SeatProps) => {
-  const background =
-    props.seat?.status == "confirmed" ? "darkseagreen" : "gray";
-  return (
-    <div
-      className={props.className}
-      style={{
-        background: background,
-        margin: 5,
-        padding: 5,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        cursor: "pointer",
-      }}
-      onClick={props.onClick}
-    >
-      <text>{props.seat?.number}</text>
-      <div
-        className={props.headClass}
-        style={{
-          display: "flex",
-          marginLeft: 5,
-          border: "1px solid black",
-          borderRadius: 3,
-          alignItems: "center",
-          background: "darkslategrey",
-        }}
-      ></div>
-    </div>
-  );
-};
 const Deck = (props: DeckProps) => {
+  const seats = props.seats.filter((seat) => {
+    return seat.type === props.deckType;
+  });
+
   return (
     <div className={deckClasses.container} style={{}}>
       <div style={{ width: "10%" }}>
@@ -156,7 +105,7 @@ const Deck = (props: DeckProps) => {
         }}
       >
         <div style={{ display: "flex", flexDirection: "row", marginTop: 10 }}>
-          {props.seats.map((seat, i) => {
+          {seats.map((seat, i) => {
             if (i < 5)
               return (
                 <Seat
@@ -169,7 +118,7 @@ const Deck = (props: DeckProps) => {
           })}
         </div>
         <div style={{ display: "flex", flexDirection: "row" }}>
-          {props.seats.map((seat, i) => {
+          {seats.map((seat, i) => {
             if (i >= 5 && i < 10)
               return (
                 <Seat
@@ -182,7 +131,7 @@ const Deck = (props: DeckProps) => {
           })}
         </div>
         <div style={{ display: "flex", flexDirection: "row", marginTop: 100 }}>
-          {props.seats.map((seat, i) => {
+          {seats.map((seat, i) => {
             if (i >= 10 && i < 15)
               return (
                 <Seat
@@ -197,7 +146,7 @@ const Deck = (props: DeckProps) => {
       </div>
       <div style={{ width: "10%", display: "flex", alignItems: "center" }}>
         <Seat
-          seat={props.seats[props.seats.length - 1]}
+          seat={seats[seats.length - 1]}
           onClick={props.onClick}
           className={seatClasses.backSeat}
           headClass={seatClasses.backSeatHead}
@@ -207,53 +156,58 @@ const Deck = (props: DeckProps) => {
   );
 };
 const SeatLayout = () => {
-  const [busSeats, setBusSeats] = useState<Array<Seat>>([]);
-  const [busDetails, setBusDeatils] = useState<BusDetails>({ number: "" });
-  const [busNumber, setBusNumber] = useState<string>("");
+  const [busSeats, setBusSeats] = useState<Array<SeatData>>([]);
+  const [busDetails, setBusDeatils] = useState<Bus>();
   const [showReservationModal, setShowReservationModal] =
     useState<boolean>(false);
-  const seatRef = useRef<Seat>({
-    type: "",
-    number: "",
-    status: "",
-  });
+  const [selectedSeat, setSelectedSeat] = useState<SeatData>();
+
   useEffect(() => {
     (async () => {
-      //   const response = await axios.get("bus seats");
-      const response = SeatsData;
-      setBusSeats(response.data.seats);
-      setBusDeatils(response.data.bus_details);
+      if (busDetails?.id) {
+        const response = await Request.get(`/seats?bus_id=${busDetails?.id}`);
+        setBusSeats(response.data);
+      }
     })();
-  }, [busNumber]);
+  }, [busDetails?.id]);
+
+  useEffect(() => {}, [busSeats]);
 
   const onCancel = () => {
     setShowReservationModal(false);
   };
-  const onFailure = () => {};
-  const onSuccess = () => {
+  const onFailure = () => {
     setShowReservationModal(false);
   };
+  const onSuccess = () => {
+    setShowReservationModal(false);
 
-  const onSubmit = async (data: any) => {
+    let temp = [...busSeats];
+    const reqIndex = temp.findIndex((seat) => seat.id === selectedSeat.id);
+    temp[reqIndex]["status"] = "booked";
+    setBusSeats(temp);
+  };
+
+  const onSubmit = async (data: UserData) => {
     try {
-      const response = await axios.post("make reservation", {
-        ...data,
-        bus_number: busDetails.number,
-        seat_number: seatRef.current.number,
+      const response = await Request.post("/reservations", {
+        passenger_details: data,
+        bus_id: busDetails.id,
+        seat_id: selectedSeat.id,
       });
-      response.status == 200 ? onSuccess() : onFailure();
+      response.status === 200 ? onSuccess() : onFailure();
     } catch (e) {
       onFailure();
       console.log("Error occurred while making a resevation", e);
     }
   };
-  const onSeatSelect = (seat: Seat) => {
-    seatRef.current = seat;
+  const onSeatSelect = (seat: SeatData) => {
+    setSelectedSeat(seat);
     setShowReservationModal(true);
   };
 
-  const onBusSelect = (value: string) => {
-    setBusNumber(value);
+  const onBusSelect = (value: Bus) => {
+    setBusDeatils(value);
   };
   return (
     <div className={classes.container}>
@@ -261,26 +215,19 @@ const SeatLayout = () => {
         onBusSelect={onBusSelect}
         containerClass={classes.busContainer}
       />
-      <span className={classes.reservationText}>
-        Click on avaliable seats to make a reservation.
-      </span>
-      <span className={classes.headerText}>Lower Deck</span>
-      <Deck
-        deckType={"lower"}
-        seats={busSeats.slice(0, busSeats.length / 2)}
-        onClick={(e: any) => onSeatSelect(e.target.value)}
-      />
-      <span className={classes.headerText}>Upper Deck</span>
-      <Deck
-        deckType={"upper"}
-        seats={busSeats.slice(busSeats.length / 2, busSeats.length)}
-        onClick={(e: any) => onSeatSelect(e.target.value)}
-      />
+      {busSeats.length > 0 && (
+        <>
+          <span className={classes.reservationText}>
+            Click on avaliable seats to make a reservation.
+          </span>
+          <span className={classes.headerText}>Lower Deck</span>
+          <Deck deckType={"lower"} seats={busSeats} onClick={onSeatSelect} />
+          <span className={classes.headerText}>Upper Deck</span>
+          <Deck deckType={"upper"} seats={busSeats} onClick={onSeatSelect} />
+        </>
+      )}
       <Modal open={showReservationModal}>
-        <BookingModal
-          onSubmit={onSubmit}
-          onCancel={onCancel}
-        />
+        <BookingModal onSubmit={onSubmit} onCancel={onCancel} />
       </Modal>
     </div>
   );

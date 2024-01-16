@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Modal } from "@mui/material";
-import axios from "axios";
-import DashboardData from "../helpers/dashboard.json";
 import { getObjectClassNames } from "../design/utils";
 import { Bus, BusMenu } from "./common/BusMenu";
 import { EditView } from "./common/EditModal";
+import Request from "helpers/request";
+import { UserData } from "./common/BookingModal";
 
 const classes = getObjectClassNames({
   tableCellHeader: {
     padding: 10,
     fontWeight: 600,
-    // border: "1px solid black",
     borderCollapse: "collapse",
     boxShadow: "0px 2px 5px grey",
   },
@@ -21,10 +20,7 @@ const classes = getObjectClassNames({
     boxShadow: "0px 1px 3px grey",
   },
   tableHead: {
-    // border: "1px solid black",
-    // borderCollapse: "collapse",
     position: "sticky",
-    // border: "1px solid black",
     top: 0,
     background: "white",
     boxShadow: "0px 2px 5px grey",
@@ -46,7 +42,7 @@ const classes = getObjectClassNames({
   },
   container: {
     width: "80%",
-    height: 500,
+    maxHeight: 600,
     overflowY: "auto",
     marginTop: 20,
     border: "1px solid black",
@@ -55,22 +51,16 @@ const classes = getObjectClassNames({
   busContainer: {
     width: "80%",
   },
-  // bodyContainer: {
-  //   width: "80%",
-  //   // display: "flex",
-  //   // flexDirection: "column",
-  //   // justifyContent: "center",
-  //   height: 300,
-  //   overflowY: "auto",
-  // },
 });
 
 export type Reservation = {
-  first_name: string;
-  last_name: string;
-  email: string;
-  seat_number: string;
-  booking_date: string;
+  passenger_data: { first_name: string; last_name: string; email: string };
+  seat_id: string;
+  bus_id: string;
+  status: string;
+  id: string;
+  created_at: string;
+  number: string;
 };
 
 type UpdatedValue = {
@@ -83,37 +73,48 @@ const ReservationDashboard = () => {
   const [reservations, setReservations] = useState<Array<Reservation>>([]);
   const [updatedValues, setUpdatedValues] = useState<UpdatedValue>({});
   const [showEditView, setShowEditView] = useState<boolean>(false);
-  const [busNumber, setBusNumber] = useState<string>("");
-  const currIndexRef = useRef<number>(0);
+  const [busData, setBusData] = useState<Bus>({
+    id: "",
+    name: "",
+    type: "",
+    number: "",
+  });
+  const [selectedReservation, setSelectedReservation] = useState<Reservation>();
 
   useEffect(() => {
-    // (async () => {
-    //   const response = await axios.get("reservations");
-    //   setReservations(response.data);
-    // })();
-    setReservations(DashboardData);
-  }, [busNumber]);
+    (async () => {
+      if (busData?.id) {
+        const response = await Request.get(
+          `/reservations?bus_id=${busData.id}`
+        );
+        setReservations(response.data);
+      }
+    })();
+  }, [busData?.id]);
 
-  const onBusSelect = (value: string) => {
-    setBusNumber(value);
-  };
-  const onUpdate = (key: string, value: string) => {
-    const temp = updatedValues;
-    temp[key] = value;
-    setUpdatedValues(temp);
+  const onBusSelect = (value: Bus) => {
+    setBusData(value);
   };
 
-  const onEdit = (index: number) => {
-    currIndexRef.current = index;
+  const onEdit = (value: Reservation) => {
+    setSelectedReservation(value);
     setShowEditView(true);
   };
 
-  const onSaveChanges = () => {
-    const temp = reservations;
-    temp[currIndexRef.current] = {
-      ...temp[currIndexRef.current],
-      ...updatedValues,
+  const onSaveChanges = async (updatedUserData: UserData) => {
+    const temp = [...reservations];
+    const reqIndex = temp.findIndex(
+      (resv) => resv.id === selectedReservation.id
+    );
+    const newPassengerData = {
+      ...selectedReservation.passenger_data,
+      ...updatedUserData,
     };
+    temp[reqIndex]["passenger_data"] = newPassengerData;
+    await Request.put("/reservations", {
+      id: selectedReservation.id,
+      passenger_data: newPassengerData,
+    });
     setReservations(temp);
     setShowEditView(false);
   };
@@ -122,12 +123,14 @@ const ReservationDashboard = () => {
     setShowEditView(false);
   };
 
-  const editView = () => {};
+  const deleteReservation = async (reservation_id: any) => {
+    await Request.delete(`/reservations/${reservation_id}`);
+  };
 
-  const onDelete = (index: number) => {
+  const onDelete = (index: number, resv: Reservation) => {
     const temp = [...reservations];
+    deleteReservation(resv.id);
     temp.splice(index, 1);
-    console.log(temp);
     setReservations(temp);
   };
 
@@ -135,12 +138,11 @@ const ReservationDashboard = () => {
     <div
       style={{
         padding: 10,
-        height: '100%',
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        background:
-          "ghostwhite",
+        background: "ghostwhite",
       }}
     >
       <BusMenu
@@ -171,8 +173,9 @@ const ReservationDashboard = () => {
             </tr>
           </thead>
           <tbody className={classes.tableBody}>
-            {reservations.map((e, i) => {
+            {reservations?.map((resv, i) => {
               let background = i % 2 == 0 ? "floralwhite" : "lavender";
+              let userData = resv.passenger_data;
               return (
                 <tr className={classes.tableRow}>
                   <td
@@ -185,37 +188,38 @@ const ReservationDashboard = () => {
                     className={classes.tableCell}
                     style={{ width: "30%", background: background }}
                   >
-                    {e.first_name} {e.last_name}
+                    {userData.first_name || "John"}{" "}
+                    {userData.last_name || "Doe"}
                   </td>
                   <td
                     className={classes.tableCell}
                     style={{ width: "30%", background: background }}
                   >
-                    {e.email}
+                    {userData.email}
                   </td>
                   <td
                     className={classes.tableCell}
                     style={{ width: "7%", background: background }}
                   >
-                    {e.seat_number}
+                    {resv.number}
                   </td>
                   <td
                     className={classes.tableCell}
                     style={{ width: "10%", background: background }}
                   >
-                    {e.booking_date}
+                    {resv.created_at}
                   </td>
                   <td
                     className={classes.tableCell}
                     style={{ width: "5%", background: background }}
                   >
-                    <button onClick={(e) => onEdit(i)}>Edit</button>
+                    <button onClick={(e) => onEdit(resv)}>Edit</button>
                   </td>
                   <td
                     className={classes.tableCell}
                     style={{ width: "8%", background: background }}
                   >
-                    <button onClick={(e) => onDelete(i)}>Delete</button>
+                    <button onClick={(e) => onDelete(i, resv)}>Delete</button>
                   </td>
                 </tr>
               );
@@ -225,11 +229,9 @@ const ReservationDashboard = () => {
       </div>
       <Modal open={showEditView}>
         <EditView
-          onUpdate={onUpdate}
           onCancel={onCancel}
           onSaveChanges={onSaveChanges}
-          reservations={reservations}
-          index={currIndexRef.current}
+          reservation={selectedReservation}
         />
       </Modal>
     </div>

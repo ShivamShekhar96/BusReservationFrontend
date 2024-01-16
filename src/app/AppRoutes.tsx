@@ -22,6 +22,7 @@ const AppRoutes = () => {
       <BrowserRouter>
         <Layout>
           <Routes>
+            <Route path="/" Component={SeatLayout}></Route>
             <Route path="/seats" Component={SeatLayout}></Route>
             <Route path="/dashboard" Component={ReservationDashboard}></Route>
           </Routes>

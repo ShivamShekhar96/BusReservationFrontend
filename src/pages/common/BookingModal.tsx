@@ -8,9 +8,9 @@ const modalClasses = getObjectClassNames({
     background: "aliceblue",
     flexWrap: "wrap",
     width: "40%",
-    top: '30%',
-    right: '30%',
-    position: 'fixed',
+    top: "30%",
+    right: "30%",
+    position: "fixed",
     alignContent: "center",
     height: 300,
     display: "flex",
@@ -43,7 +43,7 @@ type BookingModalProps = {
   onCancel: any;
 };
 
-type UserData = {
+export type UserData = {
   first_name: string;
   last_name: string;
   email: string;
