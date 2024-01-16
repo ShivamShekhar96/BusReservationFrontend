@@ -19,9 +19,9 @@ const deckClasses = getObjectClassNames({
     flexDirection: "row",
     width: "50%",
     height: 400,
-    background: "floralwhite",
-    borderRadius: 3,
-    boxShadow: "3px 3px 3px gray",
+    background: "#ffffff",
+    borderRadius: 5,
+    boxShadow: "3px 3px 10px gray",
   },
   busHandle: {
     display: "flex",
@@ -36,16 +36,18 @@ const classes = getObjectClassNames({
   container: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
-    background: "ghostwhite",
+    background: "linear-gradient(90deg, rgba(228,232,228,1) 0%, rgba(176,176,176,1) 100%)",
     padding: 10,
+    height: 900,
+    maxHeight: 1600
   },
   reservationText: {
     background: "red",
     margin: "10px 0px 5px 0px",
     padding: 10,
-    borderRadius: 3,
+    borderRadius: 5,
   },
   headerText: {
     padding: 10,
@@ -64,7 +66,7 @@ const seatClasses = getObjectClassNames({
     width: 100,
     display: "flex",
     justifyContent: "space-around",
-    borderRadius: 3,
+    borderRadius: 5,
     flexDirection: "row",
   },
   head: {
@@ -74,7 +76,7 @@ const seatClasses = getObjectClassNames({
   backSeat: {
     height: "100px !important",
     width: "50px !important",
-    borderRadius: 3,
+    borderRadius: 5,
     flexDirection: "column",
   },
   backSeatHead: {

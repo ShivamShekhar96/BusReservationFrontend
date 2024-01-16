@@ -18,13 +18,14 @@ const classes = getObjectClassNames({
     justifyContent: "space-around",
     height: 100,
     alignItems: "center",
-    background: "floralwhite",
-    borderRadius: 3,
+    background: "#ffffff",
+    borderRadius: 5,
     margin: 10,
+    maxWidth: 420,
+    boxShadow: '1px 1px 10px grey'
   },
   label: {
     fontWeight: 600,
-    textDecoration: "underline",
   },
 });
 type BusMenuProps = {
@@ -53,7 +54,7 @@ export const BusMenu = (props: BusMenuProps) => {
   return (
     <div className={`${classes.container} ${props.containerClass}`}>
       <label className={classes.label} htmlFor="bus-menu">
-        Select Bus:
+        Available Buses:
       </label>
       <input
         list="buses-list"

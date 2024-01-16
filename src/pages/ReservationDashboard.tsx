@@ -46,10 +46,17 @@ const classes = getObjectClassNames({
     overflowY: "auto",
     marginTop: 20,
     border: "1px solid black",
-    borderRadius: 3,
+    borderRadius: 5,
+    boxShadow: '1px 1px 10px grey '
   },
   busContainer: {
     width: "80%",
+  },
+  reservationText: {
+    background: "red",
+    margin: "10px 0px 5px 0px",
+    padding: 10,
+    borderRadius: 5,
   },
 });
 
@@ -71,7 +78,6 @@ type UpdatedValue = {
 
 const ReservationDashboard = () => {
   const [reservations, setReservations] = useState<Array<Reservation>>([]);
-  const [updatedValues, setUpdatedValues] = useState<UpdatedValue>({});
   const [showEditView, setShowEditView] = useState<boolean>(false);
   const [busData, setBusData] = useState<Bus>({
     id: "",
@@ -137,95 +143,121 @@ const ReservationDashboard = () => {
     <div
       style={{
         padding: 10,
-        height: "100%",
+        height: 900,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        background: "ghostwhite",
+        background: "linear-gradient(90deg, rgba(228,232,228,1) 0%, rgba(176,176,176,1) 100%)",
       }}
     >
       <BusMenu
         onBusSelect={onBusSelect}
         containerClass={classes.busContainer}
       />
-      <div className={classes.container}>
-        <table className={classes.tableContainer}>
-          <thead className={classes.tableHead}>
-            <tr>
-              <td className={classes.tableCellHeader} style={{ width: "10%" }}>
-                Serial No.
-              </td>
-              <td className={classes.tableCellHeader} style={{ width: "30%" }}>
-                Name
-              </td>
-              <td className={classes.tableCellHeader} style={{ width: "30%" }}>
-                Email
-              </td>
-              <td className={classes.tableCellHeader} style={{ width: "7%" }}>
-                Seat No.
-              </td>
-              <td className={classes.tableCellHeader} style={{ width: "10%" }}>
-                Booking Date
-              </td>
-              <td className={classes.tableCellHeader} style={{ width: "5%" }} />
-              <td className={classes.tableCellHeader} style={{ width: "8%" }} />
-            </tr>
-          </thead>
-          <tbody className={classes.tableBody}>
-            {reservations?.map((resv, i) => {
-              let background = i % 2 == 0 ? "floralwhite" : "lavender";
-              let userData = resv.passenger_data;
-              return (
-                <tr className={classes.tableRow}>
-                  <td
-                    className={classes.tableCell}
-                    style={{ width: "10%", background: background }}
-                  >
-                    {i + 1}.
-                  </td>
-                  <td
-                    className={classes.tableCell}
-                    style={{ width: "30%", background: background }}
-                  >
-                    {userData.first_name || "John"}{" "}
-                    {userData.last_name || "Doe"}
-                  </td>
-                  <td
-                    className={classes.tableCell}
-                    style={{ width: "30%", background: background }}
-                  >
-                    {userData.email}
-                  </td>
-                  <td
-                    className={classes.tableCell}
-                    style={{ width: "7%", background: background }}
-                  >
-                    {resv.number}
-                  </td>
-                  <td
-                    className={classes.tableCell}
-                    style={{ width: "10%", background: background }}
-                  >
-                    {resv.created_at}
-                  </td>
-                  <td
-                    className={classes.tableCell}
-                    style={{ width: "5%", background: background }}
-                  >
-                    <button onClick={(e) => onEdit(resv)}>Edit</button>
-                  </td>
-                  <td
-                    className={classes.tableCell}
-                    style={{ width: "8%", background: background }}
-                  >
-                    <button onClick={(e) => onDelete(i, resv)}>Delete</button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      {reservations.length > 0 ? (
+        <div className={classes.container}>
+          <table className={classes.tableContainer}>
+            <thead className={classes.tableHead}>
+              <tr>
+                <td
+                  className={classes.tableCellHeader}
+                  style={{ width: "10%" }}
+                >
+                  Serial No.
+                </td>
+                <td
+                  className={classes.tableCellHeader}
+                  style={{ width: "30%" }}
+                >
+                  Name
+                </td>
+                <td
+                  className={classes.tableCellHeader}
+                  style={{ width: "30%" }}
+                >
+                  Email
+                </td>
+                <td className={classes.tableCellHeader} style={{ width: "7%" }}>
+                  Seat No.
+                </td>
+                <td
+                  className={classes.tableCellHeader}
+                  style={{ width: "10%" }}
+                >
+                  Booking Date
+                </td>
+                <td
+                  className={classes.tableCellHeader}
+                  style={{ width: "5%" }}
+                />
+                <td
+                  className={classes.tableCellHeader}
+                  style={{ width: "8%" }}
+                />
+              </tr>
+            </thead>
+            <tbody className={classes.tableBody}>
+              {reservations?.map((resv, i) => {
+                let background = i % 2 == 0 ? "floralwhite" : "lavender";
+                let userData = resv.passenger_data;
+                return (
+                  <tr className={classes.tableRow}>
+                    <td
+                      className={classes.tableCell}
+                      style={{ width: "10%", background: background }}
+                    >
+                      {i + 1}.
+                    </td>
+                    <td
+                      className={classes.tableCell}
+                      style={{ width: "30%", background: background }}
+                    >
+                      {userData.first_name || "John"}{" "}
+                      {userData.last_name || "Doe"}
+                    </td>
+                    <td
+                      className={classes.tableCell}
+                      style={{ width: "30%", background: background }}
+                    >
+                      {userData.email}
+                    </td>
+                    <td
+                      className={classes.tableCell}
+                      style={{ width: "7%", background: background }}
+                    >
+                      {resv.number}
+                    </td>
+                    <td
+                      className={classes.tableCell}
+                      style={{ width: "10%", background: background }}
+                    >
+                      {resv.created_at}
+                    </td>
+                    <td
+                      className={classes.tableCell}
+                      style={{ width: "5%", background: background }}
+                    >
+                      <button onClick={(e) => onEdit(resv)}>Edit</button>
+                    </td>
+                    <td
+                      className={classes.tableCell}
+                      style={{ width: "8%", background: background }}
+                    >
+                      <button onClick={(e) => onDelete(i, resv)}>Delete</button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        !!busData.id && (
+          <span className={classes.reservationText}>
+            No reservations exists for the selected bus.
+          </span>
+        )
+      )}
       <Modal open={showEditView}>
         <EditView
           onCancel={onCancel}

@@ -8,7 +8,8 @@ import { UserData } from "./BookingModal";
 const modalClasses = getObjectClassNames({
   container: {
     flexDirection: "column",
-    background: "aliceblue",
+    background:
+      "linear-gradient(90deg, rgba(228,232,228,1) 0%, rgba(176,176,176,1) 100%)",
     flexWrap: "wrap",
     width: "40%",
     top: "30%",
@@ -17,7 +18,7 @@ const modalClasses = getObjectClassNames({
     alignContent: "center",
     height: 300,
     display: "flex",
-    borderRadius: 3,
+    borderRadius: 5,
     padding: 10,
     justifyContent: "center",
   },
@@ -89,7 +90,10 @@ export const EditView = (props: EditView) => {
         />
       </div>
       <div className={modalClasses.actionContainer}>
-        <Button onClick={() => props.onSaveChanges(updatedUserData)}>
+        <Button
+          disabled={!!!updatedUserData?.email}
+          onClick={() => props.onSaveChanges(updatedUserData)}
+        >
           Save
         </Button>
         <Button onClick={props.onCancel}>Cancel</Button>

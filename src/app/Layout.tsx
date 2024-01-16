@@ -4,7 +4,7 @@ import { getObjectClassNames } from "design/utils";
 
 const classes = getObjectClassNames({
   container: {
-    background: "ghostwhite",
+    background: "linear-gradient(90deg, rgba(228,232,228,1) 0%, rgba(176,176,176,1) 100%)",
   },
 });
 const Layout = ({ ...props }) => {
