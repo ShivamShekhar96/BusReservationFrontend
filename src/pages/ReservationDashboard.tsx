@@ -111,8 +111,7 @@ const ReservationDashboard = () => {
       ...updatedUserData,
     };
     temp[reqIndex]["passenger_data"] = newPassengerData;
-    await Request.put("/reservations", {
-      id: selectedReservation.id,
+    await Request.put(`/reservations/${selectedReservation.id}`, {
       passenger_data: newPassengerData,
     });
     setReservations(temp);
