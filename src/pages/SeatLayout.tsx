@@ -193,7 +193,7 @@ const SeatLayout = () => {
   const onSubmit = async (data: UserData) => {
     try {
       const response = await Request.post("/reservations", {
-        passenger_details: data,
+        passenger_data: data,
         bus_id: busDetails.id,
         seat_id: selectedSeat.id,
       });
